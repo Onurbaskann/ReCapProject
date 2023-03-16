@@ -10,3 +10,6 @@ C:\Users\onur.baskan\Desktop\Trails\ReCapProject\Entities\obj\Debug\net6.0\Entit
 C:\Users\onur.baskan\Desktop\Trails\ReCapProject\Entities\obj\Debug\net6.0\refint\Entities.dll
 C:\Users\onur.baskan\Desktop\Trails\ReCapProject\Entities\obj\Debug\net6.0\Entities.pdb
 C:\Users\onur.baskan\Desktop\Trails\ReCapProject\Entities\obj\Debug\net6.0\ref\Entities.dll
+C:\Users\onur.baskan\Desktop\Trails\ReCapProject\Entities\bin\Debug\net6.0\Core.dll
+C:\Users\onur.baskan\Desktop\Trails\ReCapProject\Entities\bin\Debug\net6.0\Core.pdb
+C:\Users\onur.baskan\Desktop\Trails\ReCapProject\Entities\obj\Debug\net6.0\Entities.csproj.CopyComplete
