@@ -15,17 +15,17 @@ namespace ConsoleUI
             ICarService carService = new CarManager(new EFCarDal());
             
             Console.WriteLine("---------All Description-----------");
-            carService.GetAll().ForEach(f => Console.WriteLine("\n" + f.Description));
+            carService.GetAll().Data.ForEach(f => Console.WriteLine("\n" + f.Description));
 
             Console.WriteLine("\n---------Brand Condition-----------");
-            carService.GetAllByBrandId(2).ForEach(f => Console.WriteLine("\n" + f.Description));
+            carService.GetAllByBrandId(2).Data.ForEach(f => Console.WriteLine("\n" + f.Description));
 
             Console.WriteLine("\n---------Color Condition-----------");
-            Car Ccar = carService.GetCarsByColorId(2);
+            Car Ccar = carService.GetCarsByColorId(2).Data;
             Console.WriteLine("\n" + Ccar.Description);
 
             Console.WriteLine("\n---------Car Detail-----------");
-            List<CarDetail> detailCarList = carService.GetCarDetails();
+            List<CarDetail> detailCarList = carService.GetCarDetails().Data;
             foreach (var cDetail in detailCarList)
             {
                 Console.WriteLine("\n" + "Brand : " + cDetail.CarName + " | " + "Color : " + cDetail.ColorName + " | " + "DailyPrice :  " + cDetail.DailyPrice);
