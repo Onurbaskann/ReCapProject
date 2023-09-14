@@ -1,0 +1,25 @@
+﻿1xx (Informational): Bilgi amaçlı yanıt veren kodlar. İşlem devam ediyor.
+100 Continue: İstemcinin, isteğini göndermeye devam edebileceği anlamına gelir. Özellikle büyük istekler gönderilirken kullanılır.
+
+2xx (Successful): Başarıyla tamamlanan istekler için kodlar.
+200 OK: İstek başarıyla gerçekleştirildi.
+201 Created: Yeni bir kaynak oluşturuldu.
+204 No Content: İstek başarılı, ancak yanıtta herhangi bir içerik gönderilmedi.
+
+3xx (Redirection): İstemcinin ek işlem yapması gereken durumlar için kodlar.
+301 Moved Permanently: Kaynak kalıcı olarak taşındı, yeni konumu belirten URL ile yönlendirme yapılır.
+302 Found (or Temporary Redirect): Kaynak geçici olarak taşındı, geçici bir URL ile yönlendirme yapılır.
+304 Not Modified: İstemcinin önbelleğe alınmış veriyi kullanması gerektiği ve sunucunun verinin değişmediği bildirilir.
+
+4xx (Client Error): İstemcinin hata yaptığı durumlar için kodlar.
+400 Bad Request: İstek yanlış veya eksik bilgi içeriyor.
+401 Unauthorized: Kimlik doğrulama gerekiyor veya yetkilendirme başarısız oldu.
+403 Forbidden: İstemci, kaynağa erişim izni yok.
+404 Not Found: İstenen kaynak bulunamadı.
+405 Method Not Allowed: İstek için kullanılan HTTP yöntemi desteklenmiyor.
+429 Too Many Requests: İstemci, sınırlı bir hızda istek göndermeli.
+
+5xx (Server Error): Sunucunun hata yaptığı durumlar için kodlar.
+500 Internal Server Error: Sunucu bir hata oluşturdu, ancak daha spesifik bir hata kodu verilemiyor.
+502 Bad Gateway: Sunucu, başka bir sunucu ile iletişim kurarken sorun yaşadı.
+503 Service Unavailable: Sunucu şu an kullanılamıyor (genellikle bakım nedeniyle).

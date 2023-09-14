@@ -36,7 +36,7 @@ namespace Business.Concrete
             return new SuccessResult(Message.SuccessDeletedRental);
         }
 
-        public IDataResult<Rental> Get(int id)
+        public IDataResult<Rental> GetById(int id)
         {
             return new SuccessDataResult<Rental>(_rentalDal.Get(x => x.Id == id), Message.SuccessListedRental);
         }
