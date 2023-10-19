@@ -29,5 +29,9 @@ namespace Core.Constants
         public static string SuccessUpdatedRental = "Araba kiralama bilgileri güncellendi.";
         public static string SuccessDeletedRental = "Araba kiralama bilgileri silindi.";
         public static string SuccessListedRentalsDetail = "Araba kiralama bilgileri detaylı olarak listelendi";
+        public static string SuccessAddedCarImage = "Araba için belge eklendi.";
+        public static string ErrorAddedCarImage = "Araba için belge eklenirken sorun oluştu";
+        public static string SuccessUpdatedCarImage = "Belge güncellendi.";
+        public static string ErrorUpdatedCarImage = "Belge güncellenirken sorun oluştu.";
     }
 }
