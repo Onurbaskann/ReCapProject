@@ -1,4 +1,5 @@
-﻿using Core.Utilities.Result;
+﻿using Core.Utilities.Messages;
+using Core.Utilities.Result;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -17,9 +18,9 @@ namespace Core.Utilities.Helper.FileHelper
             {
                 File.Delete(path);
 
-                return new SuccessResult("Belge başarıyla silinmiştir.");
+                return new SuccessResult(FileMessages.FileDeletionSuccessMessage);
             }
-            return new ErrorResult();
+            return new ErrorResult(FileMessages.FileDeletionFailureMessage);
         }
         public IDataResult<string> Update(IFormFile file, string oldPath)
         {
@@ -29,9 +30,9 @@ namespace Core.Utilities.Helper.FileHelper
             {
                 var newFilePath = Upload(file).Data;
 
-                return new SuccessDataResult<string>(newFilePath, "Belge başarıyla güncellenmiştir.");
+                return new SuccessDataResult<string>(newFilePath, FileMessages.FileUpdateSuccessMessage);
             }
-            return new ErrorDataResult<string>();
+            return new ErrorDataResult<string>(FileMessages.FileUpdateFailureMessage);
         }
         public IDataResult<string> Upload(IFormFile file)
         {
@@ -49,7 +50,20 @@ namespace Core.Utilities.Helper.FileHelper
 
             file.CopyTo(new FileStream(filePath, FileMode.Create));
 
-            return new SuccessDataResult<string>(filePath, "Belge başarıyla yüklenmiştir.");
+            return new SuccessDataResult<string>(filePath, FileMessages.FileUploadSuccessMessage);
+        }
+        public IDataResult<string> ConvertFileToBase64(string filePath)
+        {
+            try
+            {
+                byte[] fileBytes = File.ReadAllBytes(filePath); // Dosyayı byte dizisine oku
+                string base64String = Convert.ToBase64String(fileBytes); // Base64 formatına dönüştür
+                return new SuccessDataResult<string>(base64String, FileMessages.FileRetrievalSuccessMessage);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorDataResult<string>(FileMessages.FileRetrievalFailureMessage + ex.Message); // Hata durumunda null değeri döndürülebilir veya hata yönetimi yapılabilir
+            }
         }
     }
 }

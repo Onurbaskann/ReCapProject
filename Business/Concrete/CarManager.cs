@@ -1,14 +1,9 @@
 ﻿using Business.Abstract;
-using Core.Constants;
+using Business.Constants;
 using Core.Utilities.Result;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
@@ -26,14 +21,14 @@ namespace Business.Concrete
             if (car.Description.Length > 2 && car.DailyPrice > 0)
             {
                 _carDal.Add(car);
-                return new SuccessResult(Message.SuccessAddedCar);
+                return new SuccessResult(Messages.CarAdded);
             }
-            return new ErrorResult(Message.ErrorAddedCar);
+            return new ErrorResult(Messages.CarAddError);
         }
 
         public IDataResult<List<Car>> GetAll()
         {
-            return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Message.SuccessListedCars);
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(), Messages.CarsListed);
         }
 
         public IDataResult<List<Car>> GetAllByBrandId(int Id)
@@ -43,12 +38,12 @@ namespace Business.Concrete
 
         public IDataResult<List<CarDetail>> GetCarDetails()
         {
-            return new SuccessDataResult<List<CarDetail>>(_carDal.GetCarDetails(), Message.SuccessListedCarsDetail);
+            return new SuccessDataResult<List<CarDetail>>(_carDal.GetCarDetails(), Messages.CarDetailListed);
         }
 
         public IDataResult<Car> GetCarsByColorId(int Id)
         {
-            return new SuccessDataResult<Car>(_carDal.Get(c => c.ColorId == Id), Message.SuccessGetCarByColor);
+            return new SuccessDataResult<Car>(_carDal.Get(c => c.ColorId == Id), Messages.CarByColorListed);
         }
     }
 }

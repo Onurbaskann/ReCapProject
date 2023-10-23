@@ -14,6 +14,7 @@ namespace Business.Abstract
     {
         IResult Add(CreateCarImageDto createCarImage);
         IResult Update(UpdateCarImageDto updateCarImage);
-        IResult Delete(string path);
+        IResult Delete(int id);
+        IDataResult<List<CarImageDetail>> GetByCarId(int id);
     }
 }

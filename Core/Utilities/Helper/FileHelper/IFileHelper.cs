@@ -13,5 +13,6 @@ namespace Core.Utilities.Helper.FileHelper
         IDataResult<string> Upload(IFormFile file);
         IDataResult<string> Update(IFormFile file, string oldPath);
         IResult Delete(string path);
+        IDataResult<string> ConvertFileToBase64(string filePath);
     }
 }

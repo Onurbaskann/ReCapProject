@@ -1,14 +1,9 @@
 ﻿using Business.Abstract;
-using Core.Constants;
+using Business.Constants;
 using Core.Utilities.Result;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
@@ -24,37 +19,37 @@ namespace Business.Concrete
             if (rental.ReturnDate.HasValue)
             {
                 _rentalDal.Add(rental);
-                return new SuccessResult(Message.SuccessAddedRental);
+                return new SuccessResult(Messages.RentalAdded);
             }
             else
-                return new ErrorResult(Message.ErrorNoReturnDate);
+                return new ErrorResult(Messages.ReturnDateMissing);
         }
 
         public IResult Delete(Rental rental)
         {
             _rentalDal.Delete(rental);
-            return new SuccessResult(Message.SuccessDeletedRental);
+            return new SuccessResult(Messages.RentalDeleted);
         }
 
         public IDataResult<Rental> GetById(int id)
         {
-            return new SuccessDataResult<Rental>(_rentalDal.Get(x => x.Id == id), Message.SuccessListedRental);
+            return new SuccessDataResult<Rental>(_rentalDal.Get(x => x.Id == id), Messages.RentalListed);
         }
 
         public IDataResult<List<Rental>> GetAll()
         {
-            return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(), Message.SuccessListedRentals);
+            return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(), Messages.RentalsListed);
         }
 
         public IDataResult<List<RentalDetail>> GetRentalDetails()
         {
-            return new SuccessDataResult<List<RentalDetail>>(_rentalDal.GetRentalDetails(), Message.SuccessListedRentalsDetail);
+            return new SuccessDataResult<List<RentalDetail>>(_rentalDal.GetRentalDetails(), Messages.RentalDetailListed);
         }
 
         public IResult Update(Rental rental)
         {
             _rentalDal.Update(rental);
-            return new SuccessResult(Message.SuccessUpdatedRental);
+            return new SuccessResult(Messages.RentalUpdated);
         }
     }
 }

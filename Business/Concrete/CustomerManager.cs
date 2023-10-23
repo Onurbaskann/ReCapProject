@@ -1,17 +1,11 @@
 ﻿using Business.Abstract;
+using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspect.Autofac.Validation;
-using Core.Constants;
 using Core.Utilities.Result;
 using DataAccess.Abstract;
-using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 using Entities.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
@@ -26,22 +20,19 @@ namespace Business.Concrete
         public IResult Add(Customer customer)
         {
             _customerDal.Add(customer);
-            return new SuccessResult(Message.SuccessAddedCustomer);
+            return new SuccessResult(Messages.CustomerAdded);
         }
-
         public IDataResult<List<Customer>> GetAll()
         {
-            return new SuccessDataResult<List<Customer>>(_customerDal.GetAll(), Message.SuccessListedCustomers);
+            return new SuccessDataResult<List<Customer>>(_customerDal.GetAll(), Messages.CustomersListed);
         }
-
         public IDataResult<Customer> GetById(int id)
         {
-            return new SuccessDataResult<Customer>(_customerDal.Get(x => x.Id == id), Message.SuccessListedCustomer);
+            return new SuccessDataResult<Customer>(_customerDal.Get(x => x.Id == id), Messages.CustomerListed);
         }
-
         public IDataResult<List<CustomerDetail>> GetCustomerDetails()
         {
-            return new SuccessDataResult<List<CustomerDetail>>(_customerDal.GetCustomerDetails(), Message.SuccessListedCustomersDetail);
+            return new SuccessDataResult<List<CustomerDetail>>(_customerDal.GetCustomerDetails(), Messages.CustomerDetailListed);
         }
     }
 }
