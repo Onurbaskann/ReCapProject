@@ -14,7 +14,11 @@
         public static string FileRetrievalSuccessMessage { get; } = "File retrieval successful.";
         public static string FileRetrievalFailureMessage { get; } = "File retrieval failed.";
 
-        public static string FilePathNotFoundMessage { get; } = "File path not found.";        
+        public static string FilePathNotFoundMessage { get; } = "File path not found.";
         public static string OldFileDeletionFailureMessage { get; } = "An error occurred while deleting the old file.";
+        public static string InvalidFileTypeMessage { get; } = "Invalid file type";
+        public static string FileSuccessMessage { get; } = "Operation completed successfully.";
+        public static string FileFailureMessage { get; } = "Operation failed.";
+        public static string FileSizeExceededMessage { get; } = "The file size should not exceed {0} MB.";
     }
 }

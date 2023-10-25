@@ -35,7 +35,7 @@ namespace Business.Concrete
             if (resultUpload.Success)
             {
                 carImage.CarId = createCarImage.CarId;
-                carImage.ImagePath = resultUpload.Data;
+                carImage.ImagePath = resultUpload.Data.path;
                 carImage.Date = DateTime.Now;
 
                 _carImageDal.Add(carImage);
@@ -80,7 +80,7 @@ namespace Business.Concrete
                 if (resultUpdate.Success)
                 {
                     carImage.CarId = updateCarImage.CarId;
-                    carImage.ImagePath = resultUpdate.Data;
+                    carImage.ImagePath = resultUpdate.Data.path;
                     carImage.Date = DateTime.Now;
 
                     _carImageDal.Update(carImage);
