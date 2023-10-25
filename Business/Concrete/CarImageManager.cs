@@ -1,10 +1,12 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Core.Utilities.Business;
 using Core.Utilities.Helper.FileHelper;
 using Core.Utilities.Result;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.Dtos;
+using Microsoft.AspNetCore.Http;
 
 namespace Business.Concrete
 {
@@ -22,89 +24,71 @@ namespace Business.Concrete
         {
             CarImage carImage = new CarImage();
 
-            IResult checkRules = CheckImageCountCorrect(createCarImage.CarId, 5);
-
-            if (!checkRules.Success)
+            var resultRules = BusinessRules.Run(CheckImageCountCorrect(createCarImage.CarId, 5),
+                                                IsFileValidForUpload(createCarImage.File));
+            if (resultRules != null)
             {
-                return new ErrorResult(checkRules.Message);
+                return new ErrorResult(resultRules.Message);
             }
-            if (createCarImage.File.Length > 0)
+            var resultUpload = _fileHelper.Upload(createCarImage.File);
+
+            if (resultUpload.Success)
             {
-                var resultUpload = _fileHelper.Upload(createCarImage.File);
+                carImage.CarId = createCarImage.CarId;
+                carImage.ImagePath = resultUpload.Data;
+                carImage.Date = DateTime.Now;
 
-                if (resultUpload.Success)
-                {
-                    carImage.CarId = createCarImage.CarId;
-                    carImage.ImagePath = resultUpload.Data;
-                    carImage.Date = DateTime.Now;
+                _carImageDal.Add(carImage);
 
-                    _carImageDal.Add(carImage);
-
-                    return new SuccessResult(Messages.CarImageAdded);
-                }
-                else { return new ErrorResult(resultUpload.Message); }
+                return new SuccessResult(Messages.CarImageAdded);
             }
             return new ErrorResult(Messages.CarImageAddError);
         }
         public IResult Delete(int id)
         {
-            var isExistCarImage = _carImageDal.Get(x => x.Id == id);
+            var carImage = _carImageDal.Get(x => x.Id == id);
 
-            if (isExistCarImage != null)
+            if (carImage != null)
             {
-                if (!string.IsNullOrEmpty(isExistCarImage.ImagePath))
+                if (!string.IsNullOrEmpty(carImage.ImagePath))
                 {
-                    var resultDelete = _fileHelper.Delete(isExistCarImage.ImagePath);
+                    var resultDelete = _fileHelper.Delete(carImage.ImagePath);
 
                     if (resultDelete.Success)
                     {
-                        var isImageExistingAtPath = _carImageDal.Get(x => x.ImagePath == isExistCarImage.ImagePath);
+                        _carImageDal.Delete(carImage);
 
-                        if (isImageExistingAtPath != null)
-                        {
-                            _carImageDal.Delete(isImageExistingAtPath);
-
-                            return new SuccessResult(Messages.CarImageDeleted);
-                        }
+                        return new SuccessResult(Messages.CarImageDeleted);
                     }
-                    else { return new ErrorResult(resultDelete.Message); }
                 }
             }
             return new ErrorResult(Messages.CarImageDeleteError);
         }
         public IResult Update(UpdateCarImageDto updateCarImage)
         {
-            if (updateCarImage.File.Length > 0)
+            var resultRules = BusinessRules.Run(IsFileValidForUpload(updateCarImage.File));
+            if (resultRules != null)
             {
-                var carImage = _carImageDal.Get(x => x.Id == updateCarImage.Id);
+                return new ErrorResult(resultRules.Message);
+            }
+            var carImage = _carImageDal.Get(x => x.Id == updateCarImage.Id);
 
-                if (carImage != null)
+            if (carImage != null)
+            {
+                var resultUpdate = _fileHelper.Update(updateCarImage.File, carImage.ImagePath);
+
+                if (resultUpdate.Success)
                 {
-                    var resultUpdate = _fileHelper.Update(updateCarImage.File, carImage.ImagePath);
+                    carImage.CarId = updateCarImage.CarId;
+                    carImage.ImagePath = resultUpdate.Data;
+                    carImage.Date = DateTime.Now;
 
-                    if (resultUpdate.Success)
-                    {
-                        carImage.CarId = updateCarImage.CarId;
-                        carImage.ImagePath = resultUpdate.Data;
-                        carImage.Date = DateTime.Now;
+                    _carImageDal.Update(carImage);
 
-                        _carImageDal.Update(carImage);
-
-                        return new SuccessResult(Messages.CarImageUpdated);
-                    }
-                    else { return new ErrorResult(resultUpdate.Message); };
+                    return new SuccessResult(Messages.CarImageUpdated);
                 }
             }
             return new ErrorResult(Messages.CarImageUpdateError);
-        }
-        public IResult CheckImageCountCorrect(int carId, int countLimit)
-        {
-            var result = _carImageDal.GetAll().Where(x => x.CarId == carId).Count();
-            if (result >= countLimit)
-            {
-                return new ErrorResult(string.Format(Messages.CarImageCountError, countLimit));
-            }
-            return new SuccessResult();
         }
         public IDataResult<List<CarImageDetail>> GetByCarId(int id)
         {
@@ -119,11 +103,11 @@ namespace Business.Concrete
                     string base64EncodedImage = string.Empty;
 
                     var result = _fileHelper.ConvertFileToBase64(carImage.ImagePath);
+                    
                     if (result.Success)
                     {
                         base64EncodedImage = result.Data;
                     }
-
                     carImageDetailList.Add(new CarImageDetail
                     {
                         CarId = carImage.CarId,
@@ -134,7 +118,8 @@ namespace Business.Concrete
             }
             else
             {
-                return new SuccessDataResult<List<CarImageDetail>>(DefaultCarImage(id));
+                var defaultCarImage = DefaultCarImage(id);
+                return new SuccessDataResult<List<CarImageDetail>>(defaultCarImage, string.Format(Messages.DefaultCarImageReturned, id));
             }
         }
         private List<CarImageDetail> DefaultCarImage(int id)
@@ -148,6 +133,24 @@ namespace Business.Concrete
                 }
             };
             return carImageDetails;
+        }
+        private IResult CheckImageCountCorrect(int carId, int countLimit)
+        {
+            var result = _carImageDal.GetAll().Where(x => x.CarId == carId).Count();
+            if (result >= countLimit)
+            {
+                return new ErrorResult(string.Format(Messages.CarImageCountError, countLimit));
+            }
+            return new SuccessResult();
+        }
+        private IResult IsFileValidForUpload(IFormFile file)
+        {
+            var result = file.Length > 0;
+            if (!result)
+            {
+                return new ErrorResult(Messages.FileValidForUpload);
+            }
+            return new SuccessResult();
         }
     }
 }

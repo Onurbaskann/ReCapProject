@@ -1,12 +1,7 @@
-﻿using Core.Utilities.Messages;
+﻿using Core.Utilities.Helper.GuidHelper;
+using Core.Utilities.Messages;
 using Core.Utilities.Result;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.Utilities.Helper.FileHelper
 {
@@ -16,47 +11,85 @@ namespace Core.Utilities.Helper.FileHelper
         {
             if (File.Exists(path))
             {
-                File.Delete(path);
-
-                return new SuccessResult(FileMessages.FileDeletionSuccessMessage);
+                try
+                {
+                    File.Delete(path);
+                    return new SuccessResult(FileMessages.FileDeletionSuccessMessage);
+                }
+                catch (Exception ex)
+                {
+                    return new ErrorResult($"{FileMessages.FileDeletionFailureMessage} Hata: {ex.Message}");
+                }
             }
-            return new ErrorResult(FileMessages.FileDeletionFailureMessage);
+            return new ErrorResult(FileMessages.FilePathNotFoundMessage);
         }
-        public IDataResult<string> Update(IFormFile file, string oldPath)
-        {
-            var isDelete = Delete(oldPath);
-
-            if (isDelete.Success)
-            {
-                var newFilePath = Upload(file).Data;
-
-                return new SuccessDataResult<string>(newFilePath, FileMessages.FileUpdateSuccessMessage);
-            }
-            return new ErrorDataResult<string>(FileMessages.FileUpdateFailureMessage);
-        }
-        public IDataResult<string> Upload(IFormFile file)
-        {
-            string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/cars/");
-
-            if (!Directory.Exists(folderPath))
-            {
-                Directory.CreateDirectory(folderPath);
-            }
-            string FileName = file.FileName;
-
-            string uniqueFileName = Guid.NewGuid().ToString() + "_" + FileName;
-
-            string filePath = Path.Combine(folderPath, uniqueFileName);
-
-            file.CopyTo(new FileStream(filePath, FileMode.Create));
-
-            return new SuccessDataResult<string>(filePath, FileMessages.FileUploadSuccessMessage);
-        }
-        public IDataResult<string> ConvertFileToBase64(string filePath)
+        public IDataResult<string> Update(IFormFile newFile, string oldPath)
         {
             try
             {
-                byte[] fileBytes = File.ReadAllBytes(filePath); // Dosyayı byte dizisine oku
+                var uploadDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+
+                if (!Directory.Exists(uploadDirectory))
+                {
+                    Directory.CreateDirectory(uploadDirectory);
+                }
+
+                string fileName = newFile.FileName;
+                string uniqueFileName = GuildHelper.GetCustomGuid(fileName);
+                string newFilePath = Path.Combine(uploadDirectory, uniqueFileName);
+
+                using (var newFileStream = new FileStream(newFilePath, FileMode.Create))
+                {
+                    newFile.CopyTo(newFileStream);
+                }
+
+                if (File.Exists(oldPath))
+                {
+                    try
+                    {
+                        File.Delete(oldPath);
+                    }
+                    catch (Exception ex)
+                    {
+                        return new ErrorDataResult<string>($"{FileMessages.OldFileDeletionFailureMessage} Hata: {ex.Message}");
+                    }
+                }
+                else
+                {
+                    return new ErrorDataResult<string>(FileMessages.FilePathNotFoundMessage);
+                }
+                return new SuccessDataResult<string>(newFilePath, FileMessages.FileUpdateSuccessMessage);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorDataResult<string>($"{FileMessages.FileUpdateFailureMessage} Hata: {ex.Message}");
+            }
+        }
+        public IDataResult<string> Upload(IFormFile file)
+        {
+            string uploadDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+
+            if (!Directory.Exists(uploadDirectory))
+            {
+                Directory.CreateDirectory(uploadDirectory);
+            }
+
+            string fileName = file.FileName;
+            string uniqueFileName = GuildHelper.GetCustomGuid(fileName);
+            string filePath = Path.Combine(uploadDirectory, uniqueFileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                file.CopyTo(stream);
+            }
+
+            return new SuccessDataResult<string>(filePath, FileMessages.FileUploadSuccessMessage);
+        }
+        public IDataResult<string> ConvertFileToBase64(string path)
+        {
+            try
+            {
+                byte[] fileBytes = File.ReadAllBytes(path); // Dosyayı byte dizisine oku
                 string base64String = Convert.ToBase64String(fileBytes); // Base64 formatına dönüştür
                 return new SuccessDataResult<string>(base64String, FileMessages.FileRetrievalSuccessMessage);
             }

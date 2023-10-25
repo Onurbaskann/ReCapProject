@@ -1,8 +1,5 @@
 ﻿using Business.Abstract;
-using Core.Utilities.Result;
-using Entities.Concrete;
 using Entities.Dtos;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
@@ -23,9 +20,9 @@ namespace WebAPI.Controllers
             var Result = _carImageService.Add(createCarImage);
             if (Result.Success)
             {
-                return Ok("İşlem Başarılı");
+                return Ok(Result);
             }
-            return BadRequest(Result.Message);
+            return BadRequest(Result);
         }
         [HttpPost("update")]
         public IActionResult Update([FromForm] UpdateCarImageDto updateCarImage)
@@ -33,9 +30,9 @@ namespace WebAPI.Controllers
             var Result = _carImageService.Update(updateCarImage);
             if (Result.Success)
             {
-                return Ok("İşlem Başarılı");
+                return Ok(Result);
             }
-            return BadRequest(Result.Message);
+            return BadRequest(Result);
         }
         [HttpPost("delete")]
         public IActionResult Delete(int id)
@@ -43,9 +40,9 @@ namespace WebAPI.Controllers
             var Result = _carImageService.Delete(id);
             if (Result.Success)
             {
-                return Ok("İşlem Başarılı");
+                return Ok(Result);
             }
-            return BadRequest(Result.Message);
+            return BadRequest(Result);
         }
         [HttpGet("getbycarid")]
         public IActionResult GetByCarId(int id)
@@ -53,9 +50,9 @@ namespace WebAPI.Controllers
             var Result = _carImageService.GetByCarId(id);
             if (Result.Success)
             {
-                return Ok(Result.Data);
+                return Ok(Result);
             }
-            return BadRequest(Result.Message);
+            return BadRequest(Result);
         }
     }
 }

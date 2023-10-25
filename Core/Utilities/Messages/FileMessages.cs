@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Core.Utilities.Messages
+﻿namespace Core.Utilities.Messages
 {
     public class FileMessages
     {
@@ -19,5 +13,8 @@ namespace Core.Utilities.Messages
 
         public static string FileRetrievalSuccessMessage { get; } = "File retrieval successful.";
         public static string FileRetrievalFailureMessage { get; } = "File retrieval failed.";
+
+        public static string FilePathNotFoundMessage { get; } = "File path not found.";        
+        public static string OldFileDeletionFailureMessage { get; } = "An error occurred while deleting the old file.";
     }
 }
