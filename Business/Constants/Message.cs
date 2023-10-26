@@ -58,7 +58,6 @@
         public static string CarImagesListed = "Images for the car have been listed successfully.";
         public static string CarImagesListError = "An error occurred while listing images for the car.";
         public static string DefaultCarImageReturned = "No image found for the car with ID {0}, a default image has been returned.";
-        public static string FileValidForUpload = "The uploaded file is empty or invalid.";
         #endregion
 
         #region tr-TR

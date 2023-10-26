@@ -1,24 +1,16 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\onur.baskan\\Desktop\\Trails\\ReCapProject\\WebAPI\\wwwroot\\images\\cars\\178cf6cf-e9a1-4e9d-86aa-a6516cbcceec_red-car.jpg",
-      "PackagePath": "staticwebassets\\images\\cars\\178cf6cf-e9a1-4e9d-86aa-a6516cbcceec_red-car.jpg"
+      "Id": "C:\\Users\\onur.baskan\\Desktop\\Trails\\ReCapProject\\WebAPI\\wwwroot\\file_uploads\\carImages\\2023\\10\\26\\75e87813-fd8d-466b-8cf7-ae01714366b4green-car.jpg",
+      "PackagePath": "staticwebassets\\file_uploads\\carImages\\2023\\10\\26\\75e87813-fd8d-466b-8cf7-ae01714366b4green-car.jpg"
     },
     {
-      "Id": "C:\\Users\\onur.baskan\\Desktop\\Trails\\ReCapProject\\WebAPI\\wwwroot\\images\\cars\\ae862d2c-8403-4088-9337-f4856ade837a_red-car.jpg",
-      "PackagePath": "staticwebassets\\images\\cars\\ae862d2c-8403-4088-9337-f4856ade837a_red-car.jpg"
+      "Id": "C:\\Users\\onur.baskan\\Desktop\\Trails\\ReCapProject\\WebAPI\\wwwroot\\file_uploads\\carImages\\2023\\10\\26\\875faad2-c8bf-4ef0-b8a0-b7f999931f98red-car.jpg",
+      "PackagePath": "staticwebassets\\file_uploads\\carImages\\2023\\10\\26\\875faad2-c8bf-4ef0-b8a0-b7f999931f98red-car.jpg"
     },
     {
-      "Id": "C:\\Users\\onur.baskan\\Desktop\\Trails\\ReCapProject\\WebAPI\\wwwroot\\images\\cars\\b7625494-fdee-43e6-89ff-fa973a2f9d43_yellow-car.jpg",
-      "PackagePath": "staticwebassets\\images\\cars\\b7625494-fdee-43e6-89ff-fa973a2f9d43_yellow-car.jpg"
-    },
-    {
-      "Id": "C:\\Users\\onur.baskan\\Desktop\\Trails\\ReCapProject\\WebAPI\\wwwroot\\images\\cars\\fc87791b-ca07-4a9b-ac95-172587d15354_yellow-car.jpg",
-      "PackagePath": "staticwebassets\\images\\cars\\fc87791b-ca07-4a9b-ac95-172587d15354_yellow-car.jpg"
-    },
-    {
-      "Id": "C:\\Users\\onur.baskan\\Desktop\\Trails\\ReCapProject\\WebAPI\\wwwroot\\images\\cars\\ff38afe2-a462-450e-87eb-a46c96d3c55e_green-car.jpg",
-      "PackagePath": "staticwebassets\\images\\cars\\ff38afe2-a462-450e-87eb-a46c96d3c55e_green-car.jpg"
+      "Id": "C:\\Users\\onur.baskan\\Desktop\\Trails\\ReCapProject\\WebAPI\\wwwroot\\file_uploads\\carImages\\2023\\10\\26\\fd2e79fc-6ead-450b-b13b-d1f87d7e5e1cyellow-car.jpg",
+      "PackagePath": "staticwebassets\\file_uploads\\carImages\\2023\\10\\26\\fd2e79fc-6ead-450b-b13b-d1f87d7e5e1cyellow-car.jpg"
     },
     {
       "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.WebAPI.Microsoft.AspNetCore.StaticWebAssets.props",

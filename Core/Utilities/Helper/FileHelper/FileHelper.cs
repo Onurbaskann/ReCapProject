@@ -1,5 +1,4 @@
-﻿using Core.Entites;
-using Core.Entites.Concrete;
+﻿using Core.Entites.Concrete;
 using Core.Utilities.Helper.GuidHelper;
 using Core.Utilities.Messages;
 using Core.Utilities.Result;
@@ -9,7 +8,6 @@ namespace Core.Utilities.Helper.FileHelper
 {
     public class FileHelper : IFileHelper
     {
-        public static readonly string[] root = new string[] { "wwwroot", "file_uploads" };
         public IResult Delete(string path)
         {
             if (File.Exists(path))
@@ -26,7 +24,7 @@ namespace Core.Utilities.Helper.FileHelper
             }
             return new ErrorResult(FileMessages.FilePathNotFoundMessage);
         }
-        public IDataResult<Doc> Update(IFormFile newFile, string oldPath)
+        public IDataResult<Doc> Update(IFormFile newFile, string[] root, string oldPath)
         {
             try
             {
@@ -37,9 +35,29 @@ namespace Core.Utilities.Helper.FileHelper
                     Directory.CreateDirectory(uploadDirectory);
                 }
 
+                string datePath = DateTime.Now.ToString("yyyy-MM-dd");
+                string[] dateArray = datePath.Split('-');
+
+                string yearPath = Path.Combine(uploadDirectory, dateArray[0]);
+                string monthPath = Path.Combine(yearPath, dateArray[1]);
+                string dayPath = Path.Combine(monthPath, dateArray[2]);
+
+                if (!Directory.Exists(yearPath))
+                {
+                    Directory.CreateDirectory(yearPath);
+                }
+                if (!Directory.Exists(monthPath))
+                {
+                    Directory.CreateDirectory(monthPath);
+                }
+                if (!Directory.Exists(dayPath))
+                {
+                    Directory.CreateDirectory(dayPath);
+                }
+
                 string fileName = newFile.FileName;
                 string uniqueFileName = GuildHelper.GetCustomGuid(fileName);
-                string newFilePath = Path.Combine(uploadDirectory, uniqueFileName);
+                string newFilePath = Path.Combine(dayPath, uniqueFileName);
 
                 using (var newFileStream = new FileStream(newFilePath, FileMode.Create))
                 {
@@ -75,7 +93,7 @@ namespace Core.Utilities.Helper.FileHelper
                 return new ErrorDataResult<Doc>($"{FileMessages.FileUpdateFailureMessage} Hata: {ex.Message}");
             }
         }
-        public IDataResult<Doc> Upload(IFormFile file)
+        public IDataResult<Doc> Upload(IFormFile file, string[] root)
         {
             string uploadDirectory = Path.Combine(root);
 
@@ -90,7 +108,7 @@ namespace Core.Utilities.Helper.FileHelper
             string yearPath = Path.Combine(uploadDirectory, dateArray[0]);
             string monthPath = Path.Combine(yearPath, dateArray[1]);
             string dayPath = Path.Combine(monthPath, dateArray[2]);
-​
+
             if (!Directory.Exists(yearPath))
             {
                 Directory.CreateDirectory(yearPath);
@@ -106,9 +124,9 @@ namespace Core.Utilities.Helper.FileHelper
 
             string fileName = file.FileName;
             string uniqueFileName = GuildHelper.GetCustomGuid(fileName);
-            string filePath = Path.Combine(uploadDirectory, uniqueFileName);
+            string filePath = Path.Combine(dayPath, uniqueFileName);
 
-            using (var stream = new FileStream(dayPath, FileMode.Create))
+            using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 file.CopyTo(stream);
             }
@@ -141,12 +159,6 @@ namespace Core.Utilities.Helper.FileHelper
             {
                 file.CopyTo(memoryStream);
 
-                var isValid = IsFileSizeValid(memoryStream, 5);
-                if (isValid.Success)
-                {
-                    return new ErrorDataResult<Doc>(isValid.Message);
-                }
-
                 var fileContent = memoryStream.ToArray();
                 var newFileName = GuildHelper.GetCustomGuid(file.FileName);
 
@@ -160,20 +172,8 @@ namespace Core.Utilities.Helper.FileHelper
                 return new SuccessDataResult<Doc>(doc, FileMessages.FileSuccessMessage);
             }
         }
-        private IResult IsFileTypeValid(IFormFile file)
+        public IResult IsFileTypeValid(IFormFile file, Dictionary<string, string> allowedFileTypes)
         {
-            Dictionary<string, string> allowedFileTypes = new Dictionary<string, string>
-            {
-                {"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "xlsx"},
-                {"application/vnd.ms-excel", "xls"},
-                {"image/bmp", "bmp"},
-                {"image/jpeg", "jpg"},
-                {"image/png", "png"},
-                {"application/vnd.openxmlformats-officedocument.wordprocessingml.document", "docx"},
-                {"application/msword", "doc"},
-                {"application/pdf", "pdf"}
-            };
-
             var fileType = file.ContentType;
 
             if (allowedFileTypes.TryGetValue(fileType, out var ext) && !string.IsNullOrEmpty(ext))
@@ -182,11 +182,11 @@ namespace Core.Utilities.Helper.FileHelper
             }
             return new ErrorResult(FileMessages.InvalidFileTypeMessage);
         }
-        private IResult IsFileSizeValid(MemoryStream memoryStream, int maxSizeInMB)
+        public IResult IsFileSizeValid(IFormFile file, int maxSizeInMB)
         {
             var maxSizeInBytes = maxSizeInMB * 1024 * 1024;
 
-            if (memoryStream.Length <= maxSizeInBytes)
+            if (file.Length <= maxSizeInBytes)
             {
                 return new SuccessResult();
             }

@@ -12,7 +12,7 @@
         }
         public static string GetCustomGuid(string str)
         {
-            return Guid.NewGuid().ToString() + Path.GetExtension(str);
+            return Guid.NewGuid().ToString() + "_" + str;
         }
     }
 }

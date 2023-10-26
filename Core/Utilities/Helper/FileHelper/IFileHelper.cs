@@ -6,10 +6,12 @@ namespace Core.Utilities.Helper.FileHelper
 {
     public interface IFileHelper
     {
-        IDataResult<Doc> Upload(IFormFile file);
-        IDataResult<Doc> Update(IFormFile file, string oldPath);
+        IDataResult<Doc> Upload(IFormFile file, string[] root);
+        IDataResult<Doc> Update(IFormFile file, string[] root, string oldPath);
         IResult Delete(string path);
         IDataResult<string> ConvertFileToBase64(string path);
         IDataResult<Doc> ConvertFileToBytes(IFormFile file);
+        IResult IsFileSizeValid(IFormFile file, int maxSizeInMB);
+        IResult IsFileTypeValid(IFormFile file, Dictionary<string, string> allowedFileTypes);
     }
 }

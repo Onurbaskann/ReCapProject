@@ -6,12 +6,13 @@ using Core.Utilities.Result;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.Dtos;
-using Microsoft.AspNetCore.Http;
 
 namespace Business.Concrete
 {
     public class CarImageManager : ICarImageService
     {
+        public static readonly string[] root = new string[] { "wwwroot", "file_uploads", "carImages" };
+
         ICarImageDal _carImageDal;
         IFileHelper _fileHelper;
 
@@ -25,12 +26,13 @@ namespace Business.Concrete
             CarImage carImage = new CarImage();
 
             var resultRules = BusinessRules.Run(CheckImageCountCorrect(createCarImage.CarId, 5),
-                                                IsFileValidForUpload(createCarImage.File));
+                                                _fileHelper.IsFileSizeValid(createCarImage.File, 5),
+                                                _fileHelper.IsFileTypeValid(createCarImage.File, FileTypes.GetImageTypes()));
             if (resultRules != null)
             {
                 return new ErrorResult(resultRules.Message);
             }
-            var resultUpload = _fileHelper.Upload(createCarImage.File);
+            var resultUpload = _fileHelper.Upload(createCarImage.File, root);
 
             if (resultUpload.Success)
             {
@@ -66,7 +68,8 @@ namespace Business.Concrete
         }
         public IResult Update(UpdateCarImageDto updateCarImage)
         {
-            var resultRules = BusinessRules.Run(IsFileValidForUpload(updateCarImage.File));
+            var resultRules = BusinessRules.Run(_fileHelper.IsFileSizeValid(updateCarImage.File, 5),
+                                                _fileHelper.IsFileTypeValid(updateCarImage.File, FileTypes.GetImageTypes()));
             if (resultRules != null)
             {
                 return new ErrorResult(resultRules.Message);
@@ -75,7 +78,7 @@ namespace Business.Concrete
 
             if (carImage != null)
             {
-                var resultUpdate = _fileHelper.Update(updateCarImage.File, carImage.ImagePath);
+                var resultUpdate = _fileHelper.Update(updateCarImage.File, root, carImage.ImagePath);
 
                 if (resultUpdate.Success)
                 {
@@ -103,7 +106,7 @@ namespace Business.Concrete
                     string base64EncodedImage = string.Empty;
 
                     var result = _fileHelper.ConvertFileToBase64(carImage.ImagePath);
-                    
+
                     if (result.Success)
                     {
                         base64EncodedImage = result.Data;
@@ -140,15 +143,6 @@ namespace Business.Concrete
             if (result >= countLimit)
             {
                 return new ErrorResult(string.Format(Messages.CarImageCountError, countLimit));
-            }
-            return new SuccessResult();
-        }
-        private IResult IsFileValidForUpload(IFormFile file)
-        {
-            var result = file.Length > 0;
-            if (!result)
-            {
-                return new ErrorResult(Messages.FileValidForUpload);
             }
             return new SuccessResult();
         }
