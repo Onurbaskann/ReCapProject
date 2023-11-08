@@ -24,7 +24,7 @@ namespace Core.Utilities.Helper.FileHelper
             }
             return new ErrorResult(FileMessages.FilePathNotFoundMessage);
         }
-        public IDataResult<Doc> Update(IFormFile newFile, string[] root, string oldPath)
+        public IDataResult<Document> Update(IFormFile newFile, string[] root, string oldPath)
         {
             try
             {
@@ -64,12 +64,14 @@ namespace Core.Utilities.Helper.FileHelper
                     newFile.CopyTo(newFileStream);
                 }
 
-                var doc = new Doc
+                var doc = new Document
                 {
-                    fileContent = null,
-                    fileName = uniqueFileName,
-                    fileType = newFile.ContentType,
-                    path = newFilePath
+                    Content = null,
+                    Name = uniqueFileName,
+                    Type = newFile.ContentType,
+                    Path = newFilePath,
+                    CreatedAt = DateTime.Now,
+                    Size = newFile.Length
                 };
                 if (File.Exists(oldPath))
                 {
@@ -79,21 +81,21 @@ namespace Core.Utilities.Helper.FileHelper
                     }
                     catch (Exception ex)
                     {
-                        return new ErrorDataResult<Doc>($"{FileMessages.OldFileDeletionFailureMessage} Hata: {ex.Message}");
+                        return new ErrorDataResult<Document>($"{FileMessages.OldFileDeletionFailureMessage} Hata: {ex.Message}");
                     }
                 }
                 else
                 {
-                    return new ErrorDataResult<Doc>(FileMessages.FilePathNotFoundMessage);
+                    return new ErrorDataResult<Document>(FileMessages.FilePathNotFoundMessage);
                 }
-                return new SuccessDataResult<Doc>(doc, FileMessages.FileUpdateSuccessMessage);
+                return new SuccessDataResult<Document>(doc, FileMessages.FileUpdateSuccessMessage);
             }
             catch (Exception ex)
             {
-                return new ErrorDataResult<Doc>($"{FileMessages.FileUpdateFailureMessage} Hata: {ex.Message}");
+                return new ErrorDataResult<Document>($"{FileMessages.FileUpdateFailureMessage} Hata: {ex.Message}");
             }
         }
-        public IDataResult<Doc> Upload(IFormFile file, string[] root)
+        public IDataResult<Document> Upload(IFormFile file, string[] root)
         {
             string uploadDirectory = Path.Combine(root);
 
@@ -131,14 +133,16 @@ namespace Core.Utilities.Helper.FileHelper
                 file.CopyTo(stream);
             }
 
-            var doc = new Doc
+            var doc = new Document
             {
-                fileContent = null,
-                fileName = uniqueFileName,
-                fileType = file.ContentType,
-                path = filePath
+                Content = null,
+                Name = uniqueFileName,
+                Type = file.ContentType,
+                Path = filePath,
+                CreatedAt = DateTime.Now,
+                Size = file.Length
             };
-            return new SuccessDataResult<Doc>(doc, FileMessages.FileUploadSuccessMessage);
+            return new SuccessDataResult<Document>(doc, FileMessages.FileUploadSuccessMessage);
         }
         public IDataResult<string> ConvertFileToBase64(string path)
         {
@@ -153,7 +157,7 @@ namespace Core.Utilities.Helper.FileHelper
                 return new ErrorDataResult<string>(FileMessages.FileRetrievalFailureMessage + ex.Message);
             }
         }
-        public IDataResult<Doc> ConvertFileToBytes(IFormFile file)
+        public IDataResult<Document> ConvertFileToBytes(IFormFile file)
         {
             using (var memoryStream = new MemoryStream())
             {
@@ -162,14 +166,14 @@ namespace Core.Utilities.Helper.FileHelper
                 var fileContent = memoryStream.ToArray();
                 var newFileName = GuildHelper.GetCustomGuid(file.FileName);
 
-                var doc = new Doc
+                var doc = new Document
                 {
-                    fileContent = fileContent,
-                    fileName = newFileName,
-                    fileType = file.ContentType,
-                    path = null
+                    Content = fileContent,
+                    Name = newFileName,
+                    Type = file.ContentType,
+                    Path = null
                 };
-                return new SuccessDataResult<Doc>(doc, FileMessages.FileSuccessMessage);
+                return new SuccessDataResult<Document>(doc, FileMessages.FileSuccessMessage);
             }
         }
         public IResult IsFileTypeValid(IFormFile file, Dictionary<string, string> allowedFileTypes)

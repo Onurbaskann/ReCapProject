@@ -24,7 +24,13 @@
         public static string UserDeleteError = "An error occurred while deleting the user.";
         public static string UsersListed = "Users have been listed successfully.";
         public static string UsersListError = "An error occurred while listing the users.";
-        public static string UserListed = "User has been listed successfully.";
+        public static string UserListed = "User has been listed successfully.";        
+        public static string UserNotFound = "User not found";
+        public static string PasswordError = "Incorrect password";
+        public static string SuccessfulLogin = "Login successful";
+        public static string UserAlreadyExists = "This user already exists";
+        public static string UserRegistered = "User successfully registered";
+        public static string AccessTokenCreated = "Access token successfully created";
 
         // Customer operations
         public static string CustomerAdded = "Customer has been added successfully.";
@@ -58,6 +64,8 @@
         public static string CarImagesListed = "Images for the car have been listed successfully.";
         public static string CarImagesListError = "An error occurred while listing images for the car.";
         public static string DefaultCarImageReturned = "No image found for the car with ID {0}, a default image has been returned.";
+
+        public static string AuthorizationDenied = "Unauthorized";
         #endregion
 
         #region tr-TR
@@ -84,6 +92,12 @@
         public static string UsersListed = "Kullanıcılar başarıyla listelendi.";
         public static string UsersListError = "Kullanıcılar listelenirken bir hata oluştu.";
         public static string UserListed = "Kullanıcı başarıyla listelendi.";
+        public static string UserNotFound = "Kullanıcı bulunamadı";
+        public static string PasswordError = "Şifre hatalı";
+        public static string SuccessfulLogin = "Sisteme giriş başarılı";
+        public static string UserAlreadyExists = "Bu kullanıcı zaten mevcut";
+        public static string UserRegistered = "Kullanıcı başarıyla kaydedildi";
+        public static string AccessTokenCreated = "Access token başarıyla oluşturuldu";
 
         // Müşteri işlemleri
         public static string CustomerAdded = "Müşteri başarıyla eklendi.";

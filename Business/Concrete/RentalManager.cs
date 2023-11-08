@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Aspect.Autofac;
 using Business.Constants;
 using Core.Utilities.Result;
 using DataAccess.Abstract;
@@ -35,7 +36,7 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<Rental>(_rentalDal.Get(x => x.Id == id), Messages.RentalListed);
         }
-
+        [SecuredOperation("rental.getall,admin")]
         public IDataResult<List<Rental>> GetAll()
         {
             return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(), Messages.RentalsListed);

@@ -4,6 +4,7 @@ using Business.Abstract;
 using Business.Concrete;
 using Castle.DynamicProxy;
 using Core.Utilities.Helper.FileHelper;
+using Core.Utilities.Helper.Security.JWT;
 using Core.Utilities.Interceptors;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
@@ -14,23 +15,25 @@ namespace Business.DependencyReselvors.Autofac
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<CarManager>().As<ICarService>().SingleInstance();
-            builder.RegisterType<EFCarDal>().As<ICarDal>().SingleInstance();
+            builder.RegisterType<CarManager>().As<ICarService>();
+            builder.RegisterType<EFCarDal>().As<ICarDal>();
 
-            builder.RegisterType<CustomerManager>().As<ICustomerService>().SingleInstance();
-            builder.RegisterType<EFCustomerDal>().As<ICustomerDal>().SingleInstance();
+            builder.RegisterType<CustomerManager>().As<ICustomerService>();
+            builder.RegisterType<EFCustomerDal>().As<ICustomerDal>();
 
-            builder.RegisterType<RentalManager>().As<IRentalService>().SingleInstance();
-            builder.RegisterType<EFRentalDal>().As<IRentalDal>().SingleInstance();
+            builder.RegisterType<RentalManager>().As<IRentalService>();
+            builder.RegisterType<EFRentalDal>().As<IRentalDal>();
 
-            builder.RegisterType<UserManager>().As<IUserService>().SingleInstance();
-            builder.RegisterType<EFUserDal>().As<IUserDal>().SingleInstance();
+            builder.RegisterType<CarImageManager>().As<ICarImageService>();
+            builder.RegisterType<EFCarImageDal>().As<ICarImageDal>();
 
-            builder.RegisterType<CarImageManager>().As<ICarImageService>().SingleInstance();
-            builder.RegisterType<EFCarImageDal>().As<ICarImageDal>().SingleInstance();
+            builder.RegisterType<UserManager>().As<IUserService>();
+            builder.RegisterType<EFUserDal>().As<IUserDal>();
 
-            builder.RegisterType<FileHelper>().As<IFileHelper>().SingleInstance();
+            builder.RegisterType<AuthManager>().As<IAuthService>();
+            builder.RegisterType<JWTHelper>().As<ITokenHelper>();
 
+            builder.RegisterType<FileHelper>().As<IFileHelper>();
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
             builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces()

@@ -78,3 +78,5 @@ C:\Users\onur.baskan\Desktop\Trails\ReCapProject\ConsoleUI\obj\Debug\net6.0\refi
 C:\Users\onur.baskan\Desktop\Trails\ReCapProject\ConsoleUI\obj\Debug\net6.0\ConsoleUI.pdb
 C:\Users\onur.baskan\Desktop\Trails\ReCapProject\ConsoleUI\obj\Debug\net6.0\ConsoleUI.genruntimeconfig.cache
 C:\Users\onur.baskan\Desktop\Trails\ReCapProject\ConsoleUI\obj\Debug\net6.0\ref\ConsoleUI.dll
+C:\Users\onur.baskan\Desktop\Trails\ReCapProject\ConsoleUI\bin\Debug\net6.0\Microsoft.AspNetCore.Http.Abstractions.dll
+C:\Users\onur.baskan\Desktop\Trails\ReCapProject\ConsoleUI\bin\Debug\net6.0\Microsoft.Extensions.Configuration.Binder.dll

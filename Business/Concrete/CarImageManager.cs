@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.Aspect.Autofac;
 using Business.Constants;
 using Core.Utilities.Business;
 using Core.Utilities.Helper.FileHelper;
@@ -11,7 +12,7 @@ namespace Business.Concrete
 {
     public class CarImageManager : ICarImageService
     {
-        public static readonly string[] root = new string[] { "wwwroot", "file_uploads", "carImages" };
+        private static readonly string[] root = new string[] { "wwwroot", "file_uploads", "carImages" };
 
         ICarImageDal _carImageDal;
         IFileHelper _fileHelper;
@@ -21,6 +22,7 @@ namespace Business.Concrete
             _carImageDal = carImageDal;
             _fileHelper = fileHelper;
         }
+        [SecuredOperation("carImage.add,admin")]
         public IResult Add(CreateCarImageDto createCarImage)
         {
             CarImage carImage = new CarImage();
@@ -37,7 +39,7 @@ namespace Business.Concrete
             if (resultUpload.Success)
             {
                 carImage.CarId = createCarImage.CarId;
-                carImage.ImagePath = resultUpload.Data.path;
+                carImage.ImagePath = resultUpload.Data.Path;
                 carImage.Date = DateTime.Now;
 
                 _carImageDal.Add(carImage);
@@ -83,7 +85,7 @@ namespace Business.Concrete
                 if (resultUpdate.Success)
                 {
                     carImage.CarId = updateCarImage.CarId;
-                    carImage.ImagePath = resultUpdate.Data.path;
+                    carImage.ImagePath = resultUpdate.Data.Path;
                     carImage.Date = DateTime.Now;
 
                     _carImageDal.Update(carImage);
