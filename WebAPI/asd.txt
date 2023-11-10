@@ -1,0 +1,5 @@
+'Onur','Başkan','onur.baskan@example.com','s6nOS'
+'Elif','Yılmaz','elif.yilmaz@example.com','mtT3b'
+'Mehmet','Demir','mehmet.demir@example.com','0ztfC'
+'Ayşe','Kaya','ayse.kaya@example.com','QDb6S'
+'Can','Öztürk','can.ozturk@example.com','RgIF7'
